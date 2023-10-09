@@ -1,12 +1,13 @@
 [package]
 name = "aide"
-version = "0.11.0"
+version = "0.12.0"
 authors = ["tamasfe"]
 edition = "2021"
 keywords = ["generate", "api", "openapi", "documentation", "specification"]
 license = "MIT OR Apache-2.0"
 repository = "https://github.com/tamasfe/aide"
 description = "A code-first API documentation library"
+readme = "README.md"
 
 [dependencies]
 indexmap = { version = "1", features = ["serde"] }
@@ -16,6 +17,7 @@ serde_json = "1"
 thiserror = "1"
 tracing = "0"
 aide-macros = { version = "0.7.0", path = "../aide-macros", optional = true }
+derive_more = "0.99.17"
 
 bytes = { version = "1", optional = true }
 http = { version = "0.2", optional = true }
@@ -29,9 +31,7 @@ cfg-if = "1.0.0"
 
 # custom axum extractors
 serde_qs = { version = "0.12.0", optional = true }
-jwt-authorizer = { version = "0.9", optional = true }
-axum-sqlx-tx = { version = "0.5", optional = true }
-sqlx = { version = "0.6", optional = true }
+jwt-authorizer = { version = "0.10", default-features = false, optional = true }
 
 [features]
 macros = ["dep:aide-macros"]
@@ -49,7 +49,6 @@ axum-extra-form = ["axum", "axum-extra", "axum-extra/form"]
 axum-extra-query = ["axum", "axum-extra", "axum-extra/query"]
 
 
-axum-sqlx-tx = ["dep:axum-sqlx-tx", "sqlx"]
 serde_qs = ["dep:serde_qs"]
 jwt-authorizer = ["dep:jwt-authorizer"]
 

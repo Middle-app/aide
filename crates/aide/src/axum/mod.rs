@@ -185,6 +185,7 @@ use axum::{
     routing::{IntoMakeService, Route},
     Router,
 };
+use indexmap::map::Entry;
 use indexmap::IndexMap;
 use tower_layer::Layer;
 use tower_service::Service;
@@ -283,7 +284,7 @@ where
         mut self,
         mut transform: impl FnMut(TransformPathItem) -> TransformPathItem,
     ) -> Self {
-        for (_, item) in self.paths.iter_mut() {
+        for (_, item) in &mut self.paths {
             let _ = transform(TransformPathItem::new(item));
         }
         self
@@ -514,7 +515,16 @@ where
     {
         let other: ApiRouter<S, B> = other.into();
 
-        self.paths.extend(other.paths);
+        for (key, path) in other.paths {
+            match self.paths.entry(key) {
+                Entry::Occupied(mut o) => {
+                    o.get_mut().merge_with(path);
+                }
+                Entry::Vacant(v) => {
+                    v.insert(path);
+                }
+            }
+        }
         self.router = self.router.merge(other.router);
         self
     }

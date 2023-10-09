@@ -29,6 +29,17 @@ and no one is already working on the same thing.
 
 If you are unsure, feel free to open an [issue](https://github.com/tamasfe/aide/issues) or start a [discussion](https://github.com/tamasfe/aide/discussions)!
 
+# Updating a version (for collaborators)
+
+1. Create a version bump commit
+2. Create a tag `git tag release-<crate>-<version>`
+3. Generate the changelog with `cargo install git-cliff`:  
+Make sure you delete the old `# Changelog` title in the changelog file.
+```sh
+git cliff --config "crates/<crate>/cliff.toml" --include-path "crates/<crate>/**/*" --current --prepend crates/<crate>/CHANGELOG.md
+```
+4. push the commits and the tag: `git push` and `git push origin release-<crate>-<version>`
+
 # License
 
 All contributions are licensed under MIT or Apache-2.0 at your option.
