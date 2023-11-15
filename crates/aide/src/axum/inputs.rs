@@ -39,30 +39,34 @@ where
 {
     fn operation_input(ctx: &mut crate::gen::GenContext, operation: &mut Operation) {
         let s = ctx.schema.subschema_for::<String>();
-        add_parameters(
-            ctx,
-            operation,
-            [Parameter::Header {
-                parameter_data: ParameterData {
-                    name: T::name().to_string(),
-                    description: None,
-                    required: true,
-                    format: crate::openapi::ParameterSchemaOrContent::Schema(
-                        openapi::SchemaObject {
-                            json_schema: s,
-                            example: None,
-                            external_docs: None,
-                        },
-                    ),
-                    extensions: Default::default(),
-                    deprecated: None,
-                    example: None,
-                    examples: IndexMap::default(),
-                    explode: None,
-                },
-                style: openapi::HeaderStyle::Simple,
-            }],
-        );
+        // Skip if it's a user-agent field.
+        // We don't want to include those ever.
+        if T::name() != "user-agent" {
+            add_parameters(
+                ctx,
+                operation,
+                [Parameter::Header {
+                    parameter_data: ParameterData {
+                        name: T::name().to_string(),
+                        description: None,
+                        required: true,
+                        format: crate::openapi::ParameterSchemaOrContent::Schema(
+                            openapi::SchemaObject {
+                                json_schema: s,
+                                example: None,
+                                external_docs: None,
+                            },
+                        ),
+                        extensions: Default::default(),
+                        deprecated: None,
+                        example: None,
+                        examples: IndexMap::default(),
+                        explode: None,
+                    },
+                    style: openapi::HeaderStyle::Simple,
+                }],
+            );
+        }
     }
 }
 
